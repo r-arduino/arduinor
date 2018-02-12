@@ -27,6 +27,7 @@ using namespace Rcpp;
 // and a baud rate (bps) and connects to that port at that speed and 8N1.
 // opens the port in fully raw mode so you can send binary data.
 // returns valid fd, or -1 on error
+// [[Rcpp::export]]
 int serialport_init(const char* serialport, int baud)
 {
   struct termios toptions;
@@ -61,6 +62,9 @@ int serialport_init(const char* serialport, int baud)
 #endif
   case 38400:  brate=B38400;  break;
   case 57600:  brate=B57600;  break;
+#ifdef B74880
+  case 74880:  brate=B74880;  break;
+#endif
   case 115200: brate=B115200; break;
   }
   cfsetispeed(&toptions, brate);
@@ -96,13 +100,13 @@ int serialport_init(const char* serialport, int baud)
   return fd;
 }
 
-//
+// [[Rcpp::export]]
 int serialport_close( int fd )
 {
   return close( fd );
 }
 
-//
+// [[Rcpp::export]]
 int serialport_writebyte( int fd, uint8_t b)
 {
   int n = write(fd,&b,1);
@@ -111,7 +115,7 @@ int serialport_writebyte( int fd, uint8_t b)
   return 0;
 }
 
-//
+// [[Rcpp::export]]
 int serialport_write(int fd, const char* str)
 {
   int len = strlen(str);
@@ -123,7 +127,7 @@ int serialport_write(int fd, const char* str)
   return 0;
 }
 
-//
+// 
 int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeout)
 {
   char b[1];  // read expects an array, so we give it a 1-byte array
@@ -137,6 +141,8 @@ int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeou
       if( timeout==0 ) return -2;
       continue;
     }
+    // printf("%d%d%c", i, n, b[0]); // debug
+    //usleep(4000);
 #ifdef SERIALPORTDEBUG  
     printf("serialport_read_until: i=%d, n=%d b='%c'\n",i,n,b[0]); // debug
 #endif
@@ -148,36 +154,59 @@ int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeou
   return 0;
 }
 
-//
+// [[Rcpp::export]]
+Rcpp::String serialport_read(int fd, char eolchar, int buf_max, int timeout)
+{
+  if( fd == -1 ) printf("serial port not opened.\n");
+  char buf[buf_max];
+  Rcpp::String out; 
+  
+  memset(buf,0,buf_max);
+  serialport_read_until(fd, buf, eolchar, buf_max, timeout);
+  out = buf;
+  return(out);
+}
+
+// [[Rcpp::export]]
 int serialport_flush(int fd)
 {
   sleep(2); //required to make flush work, for some reason
   return tcflush(fd, TCIOFLUSH);
 }
 
-
 // =====================================
 // [[Rcpp::export]]
-Rcpp::StringVector arduino_read(const char* serialport, int baudrate = 9600, 
-                                int times = 10, char eolchar = '\n', 
+Rcpp::StringVector arduino_read(const char* serialport, int baud = 9600,
+                                int times = 10, int delay = 10,
+                                char eolchar = '\n',
                                 int timeout = 5000, const int buf_max = 256)
 {
-  
+
   int fd;
   char buf[buf_max];
   std::vector<std::string> out(times);
-  
-  fd = serialport_init(serialport, baudrate);
-  memset(buf,0,buf_max);  //
-  serialport_read_until(fd, buf, eolchar, buf_max, timeout);
-  for (int i=0; i<times; ++i) {
+
+  fd = serialport_init(serialport, baud);
+  if( fd == -1 ) printf("serial port not opened.\n");
+  int i = 0;
+  while ( i < times ) {
     serialport_read_until(fd, buf, eolchar, buf_max, timeout);
-    out[i] = buf;
-    memset(&buf[0], 0, sizeof(buf));
+    if (strlen(buf) != 0) {
+      out[i] = buf;
+      i++;
+    }
   }
-  
-  serialport_close(fd);
+  // memset(buf,0,buf_max);  //
+  // serialport_read_until(fd, buf, eolchar, buf_max, timeout);
+  // for (int i=0; i<times; ++i) {
+  //   memset(buf,0,buf_max);  //
+  //   serialport_read_until(fd, buf, eolchar, buf_max, timeout);
+  //   out[i] = buf;
+  //   usleep(delay * 1000);
+  // }
+
   Rcpp::StringVector out2(times);
   out2 = out;
+  serialport_close(fd);
   return out2;
 }
