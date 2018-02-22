@@ -10,5 +10,7 @@
 #' 
 #' @export
 ar_stream <- function(fd, eolchar = "\n", buf_max = 256, timeout = 5000) {
+  ar_flush(fd)
+  ar_read(fd, eolchar, buf_max, timeout)
   repeat(cat(ar_read(fd, eolchar, buf_max, timeout)))
 }

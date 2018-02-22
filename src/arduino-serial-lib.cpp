@@ -253,6 +253,6 @@ Rcpp::String ar_read(int fd, char eolchar = '\n',
 // [[Rcpp::export]]
 int ar_flush(int fd)
 {
-  sleep(2); //required to make flush work, for some reason
+  usleep(10000); //required to make flush work, for some reason
   return tcflush(fd, TCIOFLUSH);
 }
