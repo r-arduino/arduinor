@@ -5,23 +5,64 @@
 
 using namespace Rcpp;
 
-// rcpp_hello_world
-List rcpp_hello_world();
-RcppExport SEXP _arduinor_rcpp_hello_world() {
+// ar_init
+int ar_init(const char* serialport, int baud);
+RcppExport SEXP _arduino_ar_init(SEXP serialportSEXP, SEXP baudSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello_world());
+    Rcpp::traits::input_parameter< const char* >::type serialport(serialportSEXP);
+    Rcpp::traits::input_parameter< int >::type baud(baudSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_init(serialport, baud));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_close
+int ar_close(int fd);
+RcppExport SEXP _arduino_ar_close(SEXP fdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type fd(fdSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_close(fd));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_read
+Rcpp::String ar_read(int fd, char eolchar, int buf_max, int timeout);
+RcppExport SEXP _arduino_ar_read(SEXP fdSEXP, SEXP eolcharSEXP, SEXP buf_maxSEXP, SEXP timeoutSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type fd(fdSEXP);
+    Rcpp::traits::input_parameter< char >::type eolchar(eolcharSEXP);
+    Rcpp::traits::input_parameter< int >::type buf_max(buf_maxSEXP);
+    Rcpp::traits::input_parameter< int >::type timeout(timeoutSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_read(fd, eolchar, buf_max, timeout));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_flush
+int ar_flush(int fd);
+RcppExport SEXP _arduino_ar_flush(SEXP fdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type fd(fdSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_flush(fd));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_arduinor_rcpp_hello_world", (DL_FUNC) &_arduinor_rcpp_hello_world, 0},
+    {"_arduino_ar_init", (DL_FUNC) &_arduino_ar_init, 2},
+    {"_arduino_ar_close", (DL_FUNC) &_arduino_ar_close, 1},
+    {"_arduino_ar_read", (DL_FUNC) &_arduino_ar_read, 4},
+    {"_arduino_ar_flush", (DL_FUNC) &_arduino_ar_flush, 1},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_arduinor(DllInfo *dll) {
+RcppExport void R_init_arduino(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

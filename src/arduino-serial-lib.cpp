@@ -1,3 +1,25 @@
+// The MIT License (MIT)
+//   
+//   Copyright (c) 2014 Tod E. Kurt
+//   
+//   Permission is hereby granted, free of charge, to any person obtaining a copy
+//   of this software and associated documentation files (the "Software"), to deal
+//   in the Software without restriction, including without limitation the rights
+//   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//   copies of the Software, and to permit persons to whom the Software is
+//   furnished to do so, subject to the following conditions:
+//     
+//     The above copyright notice and this permission notice shall be included in all
+//     copies or substantial portions of the Software.
+//   
+//   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//     SOFTWARE.
+//   
 //
 // arduino-serial-lib -- simple library for reading/writing serial ports
 //
@@ -27,13 +49,35 @@ using namespace Rcpp;
 // and a baud rate (bps) and connects to that port at that speed and 8N1.
 // opens the port in fully raw mode so you can send binary data.
 // returns valid fd, or -1 on error
+
+//' Initiate a connection to the serial port
+//' 
+//' @param serialport Name of the serial port (e.g. "/dev/tty.usbserial","COM1")
+//' @param baud Baud rate (bps) in integer. 
+//' 
+//' @description This function sets up a connection to the serial port at the 
+//' specified port name and baud rate. The port is set in 8-N-1 mode and is
+//' opened in fully raw mode so you can send binary data. 
+//' 
+//' @examples 
+//' \dontrun{
+//' # On Windows
+//' con <- ar_init("COM1") 
+//' 
+//' # On Mac
+//' con <- ar_init("/dev/cu.SLAB_USBtoUART")
+//' }
+//' 
+//' @return If connection is setup successfully, this function will return the 
+//' file descriptor. If not, it will return -1.
+//' 
+//' @export
 // [[Rcpp::export]]
-int serialport_init(const char* serialport, int baud)
+int ar_init(const char* serialport, int baud = 9600)
 {
   struct termios toptions;
   int fd;
   
-  //fd = open(serialport, O_RDWR | O_NOCTTY | O_NDELAY);
   fd = open(serialport, O_RDWR | O_NONBLOCK );
   
   if (fd == -1)  {
@@ -100,14 +144,26 @@ int serialport_init(const char* serialport, int baud)
   return fd;
 }
 
+//' Close Connection to a serial port
+//' 
+//' @description This function closes the connection opened by `ar_init()`.
+//' 
+//' @param fd File descriptor returned by `ar_init()`. Should be an integer.
+//' 
+//' @examples
+//' \dontrun{
+//' con <- ar_init("/dev/cu.SLAB_USBtoUART") 
+//' ar_close(con)
+//' }
+//' 
+//' @export
 // [[Rcpp::export]]
-int serialport_close( int fd )
+int ar_close( int fd )
 {
   return close( fd );
 }
 
-// [[Rcpp::export]]
-int serialport_writebyte( int fd, uint8_t b)
+int ar_writebyte( int fd, uint8_t b)
 {
   int n = write(fd,&b,1);
   if( n!=1)
@@ -115,8 +171,7 @@ int serialport_writebyte( int fd, uint8_t b)
   return 0;
 }
 
-// [[Rcpp::export]]
-int serialport_write(int fd, const char* str)
+int ar_write(int fd, const char* str)
 {
   int len = strlen(str);
   int n = write(fd, str, len);
@@ -128,7 +183,7 @@ int serialport_write(int fd, const char* str)
 }
 
 // 
-int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeout)
+int ar_read_until(int fd, char* buf, char until, int buf_max, int timeout)
 {
   char b[1];  // read expects an array, so we give it a 1-byte array
   int i=0;
@@ -143,9 +198,6 @@ int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeou
     }
     // printf("%d%d%c", i, n, b[0]); // debug
     //usleep(4000);
-#ifdef SERIALPORTDEBUG  
-    printf("serialport_read_until: i=%d, n=%d b='%c'\n",i,n,b[0]); // debug
-#endif
     buf[i] = b[0]; 
     i++;
   } while( b[0] != until && i < buf_max && timeout>0 );
@@ -154,59 +206,53 @@ int serialport_read_until(int fd, char* buf, char until, int buf_max, int timeou
   return 0;
 }
 
+//' Read one entry of input from an opened serial connection
+//' 
+//' @description This function reads one entry of input from an opened serial
+//' port. Each line of entry is identified by the end of line character 
+//' `eolchar`. 
+//' 
+//' @param fd File descriptor returned by `ar_init()`. Should be an integer.
+//' @param eolchar End of line character. Default value is `'\\n'`
+//' @param buf_max Maximum length of one line of entry. Default is 256.
+//' @param timeout Timeout for reads in millisecs. Default is 5000 ms.
+//' 
+//' @examples
+//' \dontrun{
+//' con <- ar_init("/dev/cu.SLAB_USBtoUART")
+//' ar_read(con)
+//' }
+//' 
+//' @export
 // [[Rcpp::export]]
-Rcpp::String serialport_read(int fd, char eolchar, int buf_max, int timeout)
+Rcpp::String ar_read(int fd, char eolchar = '\n', 
+                     int buf_max = 256, int timeout = 5000)
 {
-  if( fd == -1 ) printf("serial port not opened.\n");
+  R_CheckUserInterrupt();
   char buf[buf_max];
-  Rcpp::String out; 
-  
+
   memset(buf,0,buf_max);
-  serialport_read_until(fd, buf, eolchar, buf_max, timeout);
-  out = buf;
+  ar_read_until(fd, buf, eolchar, buf_max, timeout);
+  Rcpp::String out = buf;
   return(out);
 }
 
+//' Flush serial port
+//' 
+//' @description clearing the serial port's buffer
+//' 
+//' @param fd File descriptor returned by `ar_init()`. Should be an integer.
+//' 
+//' @examples
+//' \dontrun{
+//' con <- ar_init("/dev/cu.SLAB_USBtoUART")
+//' ar_flush(con)
+//' }
+//' 
+//' @export
 // [[Rcpp::export]]
-int serialport_flush(int fd)
+int ar_flush(int fd)
 {
   sleep(2); //required to make flush work, for some reason
   return tcflush(fd, TCIOFLUSH);
-}
-
-// =====================================
-// [[Rcpp::export]]
-Rcpp::StringVector arduino_read(const char* serialport, int baud = 9600,
-                                int times = 10, int delay = 10,
-                                char eolchar = '\n',
-                                int timeout = 5000, const int buf_max = 256)
-{
-
-  int fd;
-  char buf[buf_max];
-  std::vector<std::string> out(times);
-
-  fd = serialport_init(serialport, baud);
-  if( fd == -1 ) printf("serial port not opened.\n");
-  int i = 0;
-  while ( i < times ) {
-    serialport_read_until(fd, buf, eolchar, buf_max, timeout);
-    if (strlen(buf) != 0) {
-      out[i] = buf;
-      i++;
-    }
-  }
-  // memset(buf,0,buf_max);  //
-  // serialport_read_until(fd, buf, eolchar, buf_max, timeout);
-  // for (int i=0; i<times; ++i) {
-  //   memset(buf,0,buf_max);  //
-  //   serialport_read_until(fd, buf, eolchar, buf_max, timeout);
-  //   out[i] = buf;
-  //   usleep(delay * 1000);
-  // }
-
-  Rcpp::StringVector out2(times);
-  out2 = out;
-  serialport_close(fd);
-  return out2;
 }
