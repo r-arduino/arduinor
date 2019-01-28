@@ -4,10 +4,10 @@
 \alias{ar_flush}
 \title{Flush serial port}
 \usage{
-ar_flush(fd)
+ar_flush(con)
 }
 \arguments{
-\item{fd}{File descriptor returned by `ar_init()`. Should be an integer.}
+\item{con}{File descriptor returned by \code{ar_init()}. Should be an integer.}
 }
 \description{
 clearing the serial port's buffer

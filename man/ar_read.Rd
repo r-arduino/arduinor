@@ -4,12 +4,12 @@
 \alias{ar_read}
 \title{Read one entry of input from an opened serial connection}
 \usage{
-ar_read(fd, eolchar = "\\n", buf_max = 256L, timeout = 5000L)
+ar_read(con, eolchar = "\\n", buf_max = 256L, timeout = 5000L)
 }
 \arguments{
-\item{fd}{File descriptor returned by `ar_init()`. Should be an integer.}
+\item{con}{File descriptor returned by \code{ar_init()}. Should be an integer.}
 
-\item{eolchar}{End of line character. Default value is `'\\n'`}
+\item{eolchar}{End of line character. Default value is \code{'\\n'}}
 
 \item{buf_max}{Maximum length of one line of entry. Default is 256.}
 
@@ -17,8 +17,8 @@ ar_read(fd, eolchar = "\\n", buf_max = 256L, timeout = 5000L)
 }
 \description{
 This function reads one entry of input from an opened serial
-port. Each line of entry is identified by the end of line character 
-`eolchar`.
+port. Each line of entry is identified by the end of line character
+\code{eolchar}.
 }
 \examples{
 \dontrun{

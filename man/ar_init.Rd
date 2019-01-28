@@ -12,11 +12,11 @@ ar_init(serialport, baud = 9600L)
 \item{baud}{Baud rate (bps) in integer.}
 }
 \value{
-If connection is setup successfully, this function will return the 
+If connection is setup successfully, this function will return the
 file descriptor. If not, it will return -1.
 }
 \description{
-This function sets up a connection to the serial port at the 
+This function sets up a connection to the serial port at the
 specified port name and baud rate. The port is set in 8-N-1 mode and is
 opened in fully raw mode so you can send binary data.
 }

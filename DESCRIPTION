@@ -1,12 +1,23 @@
 Package: arduino
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
-Version: 1.0
-Date: 2018-02-20
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full sentences.
+Title: Simple Library for Reading Serial Ports
+Version: 0.1
+Authors@R: c(
+    person('Hao', 'Zhu', email = 'haozhu233@gmail.com', role = c('aut', 'cre'),
+    comment = c(ORCID = '0000-0002-3386-6076')),
+    person('Tod', 'Kurt', role = 'aut')
+    )
+Description: Simple C based library for easily reading serial ports. It works 
+    on any POSIX-compatible system, including Mac OS and Linux. 
 License: GPL (>= 2)
-Imports: Rcpp (>= 0.12.15)
+Imports: 
+    Rcpp (>= 0.12.15),
+    progress,
+    glue,
+    shiny,
+    plotly
 LinkingTo: Rcpp
-RoxygenNote: 6.0.1
+VignetteBuilder: knitr
+Encoding: UTF-8
+RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)

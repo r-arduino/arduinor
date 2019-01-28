@@ -144,6 +144,23 @@ int ar_init(const char* serialport, int baud = 9600)
   return fd;
 }
 
+//' Check if a file descriptor is still open
+//' 
+//' @description This function checks whether a stored file descriptor is still
+//' open.
+//' 
+//' @param fd File descriptor returned by `ar_init()`. Should be an integer.
+//' @examples
+//' \dontrun{
+//' con <- ar_init("/dev/cu.SLAB_USBtoUART") 
+//' ar_is_open(con)
+//' }
+// [[Rcpp::export]]
+int ar_is_open(int fd)
+{
+  return fcntl(fd, F_GETFL) != -1 || errno != EBADF;
+}
+
 //' Close Connection to a serial port
 //' 
 //' @description This function closes the connection opened by `ar_init()`.
@@ -165,7 +182,7 @@ int ar_close( int fd )
 
 int ar_writebyte( int fd, uint8_t b)
 {
-  int n = write(fd,&b,1);
+  int n = write(fd, &b, 1);
   if( n!=1)
     return -1;
   return 0;
@@ -253,6 +270,6 @@ Rcpp::String ar_read(int fd, char eolchar = '\n',
 // [[Rcpp::export]]
 int ar_flush(int fd)
 {
-  usleep(10000); //required to make flush work, for some reason
+  usleep(5000); //required to make flush work, for some reason
   return tcflush(fd, TCIOFLUSH);
 }

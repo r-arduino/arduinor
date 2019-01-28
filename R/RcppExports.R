@@ -27,6 +27,21 @@ ar_init <- function(serialport, baud = 9600L) {
     .Call('_arduino_ar_init', PACKAGE = 'arduino', serialport, baud)
 }
 
+#' Check if a file descriptor is still open
+#' 
+#' @description This function checks whether a stored file descriptor is still
+#' open.
+#' 
+#' @param fd File descriptor returned by `ar_init()`. Should be an integer.
+#' @examples
+#' \dontrun{
+#' con <- ar_init("/dev/cu.SLAB_USBtoUART") 
+#' ar_is_open(con)
+#' }
+ar_is_open <- function(fd) {
+    .Call('_arduino_ar_is_open', PACKAGE = 'arduino', fd)
+}
+
 #' Close Connection to a serial port
 #' 
 #' @description This function closes the connection opened by `ar_init()`.

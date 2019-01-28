@@ -17,6 +17,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ar_is_open
+int ar_is_open(int fd);
+RcppExport SEXP _arduino_ar_is_open(SEXP fdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type fd(fdSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_is_open(fd));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ar_close
 int ar_close(int fd);
 RcppExport SEXP _arduino_ar_close(SEXP fdSEXP) {
@@ -56,6 +67,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_arduino_ar_init", (DL_FUNC) &_arduino_ar_init, 2},
+    {"_arduino_ar_is_open", (DL_FUNC) &_arduino_ar_is_open, 1},
     {"_arduino_ar_close", (DL_FUNC) &_arduino_ar_close, 1},
     {"_arduino_ar_read", (DL_FUNC) &_arduino_ar_read, 4},
     {"_arduino_ar_flush", (DL_FUNC) &_arduino_ar_flush, 1},
