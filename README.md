@@ -63,4 +63,4 @@ Arduino IDE but give you more power to control:
 
 ![](doc/ar_plotter.png)
 
-**However, note that due to a limitation in plotly (? not confirmed yet), this plotter can't visualize signals sampling at a 25Hz or higher (on my computer) and it will freeze your R session if you do that. Therefore for now I added a `reduce_freq` option to `ar_plotter` with default ON. It will add a 40ms (0.04s) delay for every reading. If you are looking for a more precised way to **collect** data, you can either choose to turn this option off or use `ar_collect`, which is much simpler and can work in any condition. 
+> However, note that due to a limitation in plotly (? not confirmed yet), this plotter can't visualize signals sampling at a 25Hz or higher (on my computer) and it will freeze your R session if you do that. Therefore for now I added a `reduce_freq` option to `ar_plotter` with default ON. It will add a 40ms (0.04s) delay for every reading. If you are looking for a more precised way to **collect** data, you can either choose to turn this option off or use `ar_collect`, which is much simpler and can work in any condition.
