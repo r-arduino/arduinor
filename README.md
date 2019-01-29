@@ -3,7 +3,7 @@
 [![CRAN_download](http://cranlogs.r-pkg.org/badges/arduinor)](https://cran.r-project.org/package=arduinor)
 [![CRAN_download_total](http://cranlogs.r-pkg.org/badges/grand-total/arduinor)](https://cran.r-project.org/package=arduinor)
 
-`arduinor` R package provides a simplified approach to get serial data from arduino to R. Right now it depends on [Tod E. Kurt](https://github.com/todbot)'s [arduinoSerial](https://github.com/todbot/arduino-serial) C library, which can **only runs on POSIX-compatible systems, such as Mac OS X and Linux**. As a result, for now this package can only runs on these systems as well. 
+`arduinor` package provides a simplified approach to get serial data from arduino to R. Right now it depends on [Tod E. Kurt](https://github.com/todbot)'s [arduinoSerial](https://github.com/todbot/arduino-serial) C library, which can **only runs on POSIX-compatible systems, such as Mac OS X and Linux**. As a result, for now this package can only runs on these systems as well. 
 
 I'm working on getting this [libserialport](https://sigrok.org/wiki/Libserialport) C++ package to R. Once I finished the importing, I will try to move the dependencies of this package on top of that. So hopefully, in the future, we will be able to get this work on Windows as well. 
 
