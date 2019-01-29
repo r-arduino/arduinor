@@ -7,6 +7,8 @@
 ar_flush_hard(fd, flush_time = 0.05, include_c_flush = TRUE)
 }
 \arguments{
+\item{fd}{File descriptor returned by \code{ar_init()}. Should be an integer.}
+
 \item{flush_time}{Time to flush buffed results in the serial channel}
 
 \item{include_c_flush}{T/F for whether to call ar_flush at the beginning}

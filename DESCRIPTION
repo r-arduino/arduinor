@@ -1,4 +1,4 @@
-Package: arduino
+Package: arduinor
 Type: Package
 Title: Simple Library for Reading Serial Ports
 Version: 0.1

@@ -9,6 +9,8 @@ ar_plotter(fd, names = NULL, sep_fun = ar_sep_comma,
   buf_max = 256, timeout = 5000)
 }
 \arguments{
+\item{fd}{File descriptor returned by \code{ar_init()}. Should be an integer.}
+
 \item{names}{Labels for variables}
 
 \item{sep_fun}{A function that separates the inline string into different

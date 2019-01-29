@@ -24,7 +24,7 @@
 #' 
 #' @export
 ar_init <- function(serialport, baud = 9600L) {
-    .Call('_arduino_ar_init', PACKAGE = 'arduino', serialport, baud)
+    .Call('_arduinor_ar_init', PACKAGE = 'arduinor', serialport, baud)
 }
 
 #' Check if a file descriptor is still open
@@ -39,7 +39,7 @@ ar_init <- function(serialport, baud = 9600L) {
 #' ar_is_open(con)
 #' }
 ar_is_open <- function(fd) {
-    .Call('_arduino_ar_is_open', PACKAGE = 'arduino', fd)
+    .Call('_arduinor_ar_is_open', PACKAGE = 'arduinor', fd)
 }
 
 #' Close Connection to a serial port
@@ -56,7 +56,7 @@ ar_is_open <- function(fd) {
 #' 
 #' @export
 ar_close <- function(fd) {
-    .Call('_arduino_ar_close', PACKAGE = 'arduino', fd)
+    .Call('_arduinor_ar_close', PACKAGE = 'arduinor', fd)
 }
 
 #' Read one entry of input from an opened serial connection
@@ -78,7 +78,7 @@ ar_close <- function(fd) {
 #' 
 #' @export
 ar_read <- function(fd, eolchar = '\n', buf_max = 256L, timeout = 5000L) {
-    .Call('_arduino_ar_read', PACKAGE = 'arduino', fd, eolchar, buf_max, timeout)
+    .Call('_arduinor_ar_read', PACKAGE = 'arduinor', fd, eolchar, buf_max, timeout)
 }
 
 #' Flush serial port
@@ -95,6 +95,6 @@ ar_read <- function(fd, eolchar = '\n', buf_max = 256L, timeout = 5000L) {
 #' 
 #' @export
 ar_flush <- function(fd) {
-    .Call('_arduino_ar_flush', PACKAGE = 'arduino', fd)
+    .Call('_arduinor_ar_flush', PACKAGE = 'arduinor', fd)
 }
 

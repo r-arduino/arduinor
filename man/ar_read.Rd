@@ -4,10 +4,10 @@
 \alias{ar_read}
 \title{Read one entry of input from an opened serial connection}
 \usage{
-ar_read(con, eolchar = "\\n", buf_max = 256L, timeout = 5000L)
+ar_read(fd, eolchar = "\\n", buf_max = 256L, timeout = 5000L)
 }
 \arguments{
-\item{con}{File descriptor returned by \code{ar_init()}. Should be an integer.}
+\item{fd}{File descriptor returned by \code{ar_init()}. Should be an integer.}
 
 \item{eolchar}{End of line character. Default value is \code{'\\n'}}
 

@@ -4,10 +4,10 @@
 \alias{ar_is_open}
 \title{Check if a file descriptor is still open}
 \usage{
-ar_is_open(con)
+ar_is_open(fd)
 }
 \arguments{
-\item{con}{File descriptor returned by \code{ar_init()}. Should be an integer.}
+\item{fd}{File descriptor returned by \code{ar_init()}. Should be an integer.}
 }
 \description{
 This function checks whether a stored file descriptor is still

@@ -1,10 +1,10 @@
-#' arduino
+#' arduinor
 #' 
-#' @name arduino-package
-#' @aliases arduino
+#' @name arduinor-package
+#' @aliases arduinor
 #' @docType package
 #' @keywords package
-#' @useDynLib arduino
+#' @useDynLib arduinor
 #' @importFrom Rcpp sourceCpp
 #' @import progress
 #' @importFrom glue glue

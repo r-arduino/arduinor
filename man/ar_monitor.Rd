@@ -4,10 +4,12 @@
 \alias{ar_monitor}
 \title{Stream serial port data into R console}
 \usage{
-ar_monitor(fd, flush_time = 0.05, eolchar = "\\n", buf_max = 256,
+ar_monitor(fd, flush_time = 0.5, eolchar = "\\n", buf_max = 256,
   timeout = 5000)
 }
 \arguments{
+\item{fd}{File descriptor returned by \code{ar_init()}. Should be an integer.}
+
 \item{flush_time}{Time to flush buffed results in the serial channel}
 
 \item{eolchar}{End of line character. Default value is \code{'\\n'}}

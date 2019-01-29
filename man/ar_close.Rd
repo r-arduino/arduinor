@@ -4,10 +4,10 @@
 \alias{ar_close}
 \title{Close Connection to a serial port}
 \usage{
-ar_close(con)
+ar_close(fd)
 }
 \arguments{
-\item{con}{File descriptor returned by \code{ar_init()}. Should be an integer.}
+\item{fd}{File descriptor returned by \code{ar_init()}. Should be an integer.}
 }
 \description{
 This function closes the connection opened by \code{ar_init()}.
