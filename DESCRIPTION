@@ -5,7 +5,10 @@ Version: 0.1
 Authors@R: c(
     person('Hao', 'Zhu', email = 'haozhu233@gmail.com', role = c('aut', 'cre'),
     comment = c(ORCID = '0000-0002-3386-6076')),
-    person('Tod', 'Kurt', role = 'aut')
+    person('Thomas', 'Travison', role = 'aut'),
+    person('Wanting', 'Yu', role = 'ctb'),
+    person('Brad', 'Manor', role = 'aut'),
+    person('Tod', 'Kurt', role = 'aut'),
     )
 Description: Simple C based library for easily reading serial ports. It works 
     on any POSIX-compatible system, including Mac OS and Linux. 
