@@ -13,6 +13,9 @@ devtools::install("r-arduino/arduinor")
 ```
 
 # Getting Started
+
+> For a more detailed walk-through, check out [this blog-post](https://haozhu233.com/post/connect-arduino-chips-with-r/).
+
 This package offers a simplified workflow to work with arduino connections. 
 
 ```r
