@@ -1,4 +1,4 @@
-# arduinor <img src="docs/arduinor.svg" align="right" alt="logo" width="120" height = "139" style = "border: none; float: right;">
+# arduinor <img src="docs/arduinor.png" align="right" alt="logo" width="120" height = "139" style = "border: none; float: right;">
 [![CRAN_version](http://www.r-pkg.org/badges/version/arduinor)](https://cran.r-project.org/package=arduinor)
 [![CRAN_download](http://cranlogs.r-pkg.org/badges/arduinor)](https://cran.r-project.org/package=arduinor)
 [![CRAN_download_total](http://cranlogs.r-pkg.org/badges/grand-total/arduinor)](https://cran.r-project.org/package=arduinor)
