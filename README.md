@@ -9,7 +9,7 @@ I'm working on getting this [libserialport](https://sigrok.org/wiki/Libserialpor
 
 # Installation
 ```r
-devtools::install("r-arduino/arduinor")
+devtools::install_github("r-arduino/arduinor")
 ```
 
 # Getting Started
