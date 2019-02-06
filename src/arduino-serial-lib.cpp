@@ -31,8 +31,10 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-#include "arduino-serial-lib.h"
+#ifdef _WIN32
 
+#else// #include "arduino-serial-lib.h"
+#include <stdint.h>   // Standard types 
 #include <stdio.h>    // Standard input/output definitions 
 #include <unistd.h>   // UNIX standard function definitions 
 #include <fcntl.h>    // File control definitions 
@@ -41,9 +43,6 @@ using namespace Rcpp;
 #include <string.h>   // String function definitions 
 #include <sys/ioctl.h>
 #include <vector>
-
-// uncomment this to debug reads
-//#define SERIALPORTDEBUG 
 
 // takes the string name of the serial port (e.g. "/dev/tty.usbserial","COM1")
 // and a baud rate (bps) and connects to that port at that speed and 8N1.
@@ -247,7 +246,7 @@ Rcpp::String ar_read(int fd, char eolchar = '\n',
 {
   R_CheckUserInterrupt();
   char buf[buf_max];
-
+  
   memset(buf,0,buf_max);
   ar_read_until(fd, buf, eolchar, buf_max, timeout);
   Rcpp::String out = buf;
@@ -273,3 +272,6 @@ int ar_flush(int fd)
   usleep(5000); //required to make flush work, for some reason
   return tcflush(fd, TCIOFLUSH);
 }
+#endif
+
+
