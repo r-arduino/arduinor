@@ -19,6 +19,7 @@ Imports:
     glue,
     shiny,
     plotly
+Remotes: ropenscilabs/webrockets
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Encoding: UTF-8
