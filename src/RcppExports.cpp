@@ -65,12 +65,15 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_RunningMeanModule();
+
 static const R_CallMethodDef CallEntries[] = {
     {"_arduinor_ar_init", (DL_FUNC) &_arduinor_ar_init, 2},
     {"_arduinor_ar_is_open", (DL_FUNC) &_arduinor_ar_is_open, 1},
     {"_arduinor_ar_close", (DL_FUNC) &_arduinor_ar_close, 1},
     {"_arduinor_ar_read", (DL_FUNC) &_arduinor_ar_read, 4},
     {"_arduinor_ar_flush", (DL_FUNC) &_arduinor_ar_flush, 1},
+    {"_rcpp_module_boot_RunningMeanModule", (DL_FUNC) &_rcpp_module_boot_RunningMeanModule, 0},
     {NULL, NULL, 0}
 };
 

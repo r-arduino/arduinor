@@ -19,8 +19,11 @@ Imports:
     glue,
     shiny,
     plotly
+Depends:
+    Rcpp (>= 0.12.15)
 Remotes: ropenscilabs/webrockets
 LinkingTo: Rcpp
+RcppModules: RunningMeanModule
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 6.1.1

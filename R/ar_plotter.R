@@ -9,16 +9,21 @@
 #' process frequency > 25 Hz (40ms delay time) or it might be the case that 
 #' my computer doesn't have enough power. Anyway, I set this option here to
 #' add 40ms delay time to reduce the sampling frequency. 
+#' @param running_mean If an integer larger than 0 is chosen, the running mean 
+#' of each series is computed, effectively smoothing the signals. Default value
+#' is set to 0 (no running mean is calculated)
 #' @inheritParams ar_monitor
 #' 
 #' @export
 ar_plotter <- function(fd, names = NULL, sep_fun = ar_sep_comma,  
                        reduce_freq = TRUE, flush_time = 0.05,
-                       eolchar = "\n", buf_max = 256, timeout = 5000) {
+                       eolchar = "\n", buf_max = 256, timeout = 5000,
+                       running_mean = 0) {
   shiny::runApp(
     ar_app(con = fd, names = names, sep_fun = sep_fun, 
            flush_time = flush_time, reduce_freq = reduce_freq,
-           eolchar = eolchar, buf_max = buf_max, timeout = timeout), 
+           eolchar = eolchar, buf_max = buf_max, timeout = timeout, 
+           running_mean = running_mean), 
     launch.browser = rstudioapi::viewer
   )
 }
@@ -27,7 +32,9 @@ ar_plotter <- function(fd, names = NULL, sep_fun = ar_sep_comma,
 
 ar_app <- function(con, names = NULL, sep_fun = ar_sep_comma, 
                    flush_time = 0.05, reduce_freq = TRUE,
-                   eolchar = "\n", buf_max = 256, timeout = 5000) {
+                   eolchar = "\n", buf_max = 256, timeout = 5000, 
+                   running_mean = 0) {
+  
   message("Flushing Port...")
   ar_flush_hard(con, flush_time)
   first_dot <- ar_read(con, eolchar, buf_max, timeout)
@@ -37,6 +44,14 @@ ar_app <- function(con, names = NULL, sep_fun = ar_sep_comma,
   }
   first_dot <- sep_fun(first_dot)
   signal_vars <- seq(length(first_dot))
+  
+  if (running_mean > 0) {
+    rmeans <- vector("list", length(first_dot))
+    for (i in signal_vars) {
+      rmeans[[i]] <- arduinor:::RunningMean$new(running_mean)
+      rmeans[[i]]$insert(first_dot[i])
+    }
+  }
   
   if (is.null(names)) {
     names(signal_vars) <- paste("Var", signal_vars)
@@ -113,6 +128,14 @@ ar_app <- function(con, names = NULL, sep_fun = ar_sep_comma,
       if (rv$state) {
         ar_flush_hard(con, 0.04, FALSE)
         realtime <- sep_fun(ar_read(con, eolchar, buf_max, timeout))
+        
+        if (running_mean > 0) {
+          for (i in seq(length(realtime))) {
+            rmeans[[i]]$insert(realtime[[i]])
+            realtime[[i]] <- rmeans[[i]]$get_mean()
+          }
+        }
+        
         if (input$save) {
           cat(csv_newline(realtime), file = input$file, append = TRUE)
         }
